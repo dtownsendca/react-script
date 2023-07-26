@@ -38,15 +38,15 @@ read -p "Which branch would you like to pull and build? (development/staging/pro
 git fetch || error "Failed to fetch changes from the remote repository"
 
 # Check if the current branch is tracking a remote branch
-if [ -n "$(git ls-remote --exit-code origin "$current_branch")" ]; then
+if [ -n "$(git ls-remote --exit-code origin "$branch_name")" ]; then
   # Compare the local and remote branches to check for any differences
   git fetch
-  if git diff HEAD..origin/"$current_branch" --exit-code; then
+  if git diff HEAD..origin/"$branch_name" --exit-code; then
     echo "No changes in the remote repository."
     exit 1
   else
     # Step 2: If there are changes, pull them from the remote repository
-    git pull origin "$current_branch"
+    git pull origin "$branch_name"
 
     # Backup the current folder
     backup_folder
