@@ -8,11 +8,17 @@ function error {
 
 # Function to backup the current folder
 function backup_folder {
-    local timestamp=$(date +%Y%m%d%H%M%S)
-    local backup_dir="./backups"
-    local project_dir="./"
+    local date=$(date '+%Y-%m-%d-%H:%M:%S')
 
-    cp -r "$project_dir" "$backup_dir/$timestamp" || error "Failed to create backup"
+    local backup_folder="backups"
+    local parent_dir=$(dirname "$(pwd)")
+
+    local backup_dir="$parent_dir/$backup_folder/$date"
+
+    mkdir -p $backup_dir || error "Failed to create the backup directory"
+
+    cp -r . "$backup_dir" || error "Failed to create backup"
+
     echo "Backup created successfully."
 }
 
@@ -45,12 +51,9 @@ if [ -n "$(git ls-remote --exit-code origin "$branch_name")" ]; then
     echo "No changes in the remote repository."
     exit 1
   else
-    # Step 2: If there are changes, pull them from the remote repository
-    git pull origin "$branch_name"
-
     # Backup the current folder
     backup_folder
-    
+
     # Update the chosen branch
     pull_and_build "$branch_name"
   fi
