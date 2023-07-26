@@ -36,8 +36,6 @@ function pull_and_build {
 
 # Main script
 
-# Check if there are any changes in the remote repository
-
 # Ask the user for the branch they want to update
 read -p "Which branch would you like to pull and build? (development/staging/production): " branch_name
 
